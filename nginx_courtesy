@@ -1,0 +1,29 @@
+#!/bin/bash
+
+ # This file is part of a collection of bash scripts written and used by me which may be handy in server administration.
+ #
+ # (c) Corrado Mulas <tlc@mulas.me>
+ #
+ # For the full copyright and license information, please view the LICENSE
+ # file that was distributed with this source code.
+
+#Usage: pass -d flag to disable courtesy page, or -e to enable it. 
+#NGINX must be configured accordingly in order for this to work, or else it won't do anything other than creating and deleting maint.html. 
+#You should use an if statement on NGINX vhosts config, which checks if maint.html file is present or not, and if yes, returns a 503 error. 
+#Then you can set a custom 503 page (the courtesy page). With all these steps completed, you're all set.
+
+while getopts ed option; do
+   case ${option} in
+      e) # enable courtesy page
+         touch /var/www/maint.html
+                echo "Courtesy page enabled";;
+
+      d) # disable courtesy page
+         rm /var/www/maint.html
+                echo "Courtesy page disabled";;
+
+     \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
